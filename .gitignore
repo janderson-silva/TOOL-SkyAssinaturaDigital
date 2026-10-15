@@ -1,0 +1,9 @@
+build/
+*.exe
+*.dcu
+*.identcache
+*.local
+*.stat
+*.dsk
+__history/
+__recovery/
