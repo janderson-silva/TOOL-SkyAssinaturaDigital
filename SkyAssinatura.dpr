@@ -6,6 +6,8 @@ uses
   Sky.Crypto in 'src\Sky.Crypto.pas',
   Sky.Pdf in 'src\Sky.Pdf.pas';
 
+{$R *.res}
+
 begin
   Application.Initialize;
   Application.MainFormOnTaskbar := True;
