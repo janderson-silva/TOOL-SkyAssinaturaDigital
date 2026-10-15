@@ -27,6 +27,12 @@ Abra `SkyAssinatura.dproj` no Delphi. Mantenha `scripts/Render-Pdf.ps1` ao lado 
 
 Confira a assinatura em um leitor de PDF com validação criptográfica.
 
+## Reconhecimento pelo ITI
+
+Uma assinatura gerada pelo aplicativo foi **aprovada pelo VALIDAR, serviço oficial do ITI**, e reconhecida como **assinatura eletrônica qualificada**. O relatório confirmou a integridade do documento, o caminho de certificação e a conformidade da estrutura da assinatura.
+
+A aprovação se refere ao documento avaliado e não representa homologação do aplicativo. Outras assinaturas podem ser verificadas em [validar.iti.gov.br](https://validar.iti.gov.br/).
+
 ## Limitações
 
 O suporte a PDF é parcial: arquivos criptografados, com revisões incrementais, páginas rotacionadas ou certas estruturas internas não são aceitos. Limite de entrada: **200 MB**.
