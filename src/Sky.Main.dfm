@@ -13,6 +13,7 @@ object MainForm: TMainForm
   Font.Name = 'Segoe UI'
   Font.Style = []
   Position = poScreenCenter
+  WindowState = wsMaximized
   OnCreate = FormCreate
   OnDestroy = FormDestroy
   OnResize = FormResize
@@ -268,23 +269,71 @@ object MainForm: TMainForm
         TabOrder = 0
         OnClick = CertClick
       end
-      object FWidthEdit: TEdit
+      object WidthDecreaseButton: TButton
         Left = 24
         Top = 326
-        Width = 116
+        Width = 26
+        Height = 32
+        Hint = 'Diminuir largura em 10 pontos (minimo: 80 pt)'
+        Caption = '-'
+        ParentShowHint = False
+        ShowHint = True
+        TabOrder = 1
+        OnClick = AdjustSizeClick
+      end
+      object WidthIncreaseButton: TButton
+        Left = 114
+        Top = 326
+        Width = 26
+        Height = 32
+        Hint = 'Aumentar largura em 10 pontos'
+        Caption = '+'
+        ParentShowHint = False
+        ShowHint = True
+        TabOrder = 3
+        OnClick = AdjustSizeClick
+      end
+      object HeightDecreaseButton: TButton
+        Left = 160
+        Top = 326
+        Width = 26
+        Height = 32
+        Hint = 'Diminuir altura em 10 pontos (minimo: 45 pt)'
+        Caption = '-'
+        ParentShowHint = False
+        ShowHint = True
+        TabOrder = 4
+        OnClick = AdjustSizeClick
+      end
+      object HeightIncreaseButton: TButton
+        Left = 250
+        Top = 326
+        Width = 26
+        Height = 32
+        Hint = 'Aumentar altura em 10 pontos'
+        Caption = '+'
+        ParentShowHint = False
+        ShowHint = True
+        TabOrder = 6
+        OnClick = AdjustSizeClick
+      end
+      object FWidthEdit: TEdit
+        Left = 54
+        Top = 326
+        Width = 56
         Height = 32
         AutoSize = False
-        TabOrder = 1
+        TabOrder = 2
         Text = '220'
         OnChange = SizeChanged
       end
       object FHeightEdit: TEdit
-        Left = 160
+        Left = 190
         Top = 326
-        Width = 116
+        Width = 56
         Height = 32
         AutoSize = False
-        TabOrder = 2
+        TabOrder = 5
         Text = '60'
         OnChange = SizeChanged
       end
@@ -302,7 +351,7 @@ object MainForm: TMainForm
         Font.Name = 'Segoe UI'
         Font.Style = [fsBold]
         ParentFont = False
-        TabOrder = 3
+        TabOrder = 7
         OnClick = SignClick
       end
     end

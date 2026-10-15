@@ -38,6 +38,11 @@ type
     FCertLabel: TLabel;
     FWidthEdit: TEdit;
     FHeightEdit: TEdit;
+    WidthDecreaseButton: TButton;
+    WidthIncreaseButton: TButton;
+    HeightDecreaseButton: TButton;
+    HeightIncreaseButton: TButton;
+    procedure AdjustSizeClick(Sender: TObject);
     procedure FormResize(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
@@ -199,6 +204,27 @@ begin
   begin FLoaded := False; Inc(FPage); Render; FLoaded := True; end;
 end;
 
+procedure TMainForm.AdjustSizeClick(Sender: TObject);
+var Edit: TEdit; Current, Minimum, Delta: Double;
+begin
+  if (Sender = WidthDecreaseButton) or (Sender = WidthIncreaseButton) then
+  begin
+    Edit := FWidthEdit;
+    Current := SignatureWidth;
+    Minimum := 80;
+  end
+  else
+  begin
+    Edit := FHeightEdit;
+    Current := SignatureHeight;
+    Minimum := 45;
+  end;
+  if (Sender = WidthDecreaseButton) or (Sender = HeightDecreaseButton) then
+    Delta := -10
+  else Delta := 10;
+  if Current + Delta < Minimum then Exit;
+  Edit.Text := FloatToStr(Current + Delta);
+end;
 procedure TMainForm.SizeChanged(Sender: TObject);
 begin FPlaced := False; if Assigned(FPaint) then FPaint.Invalidate; end;
 
