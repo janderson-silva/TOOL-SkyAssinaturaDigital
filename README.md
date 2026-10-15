@@ -71,3 +71,7 @@ Nenhum teste foi executado. Na sua avaliacao, confira primeiro uma pagina simple
 ## Licenca
 
 Este projeto e distribuido sob a licenca [MIT](LICENSE).
+
+Copyright (c) 2026 Janderson Silva. Perfil: [janderson-silva](https://github.com/janderson-silva).
+
+Na configuracao Debug/Win32, Show general messages e Use MSBuild externally to compile estao explicitamente definidos como false. Os caminhos de saida e pesquisa continuam os definidos no projeto.
