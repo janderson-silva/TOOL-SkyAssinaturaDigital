@@ -28,6 +28,7 @@ object MainForm: TMainForm
     Color = clWhite
     ParentBackground = False
     TabOrder = 0
+    ExplicitWidth = 1238
     DesignSize = (
       1240
       88)
@@ -83,6 +84,7 @@ object MainForm: TMainForm
       Caption = 'Abrir PDF...'
       TabOrder = 0
       OnClick = OpenClick
+      ExplicitLeft = 1054
     end
   end
   object StatusPanel: TPanel
@@ -97,6 +99,8 @@ object MainForm: TMainForm
     Padding.Right = 24
     ParentBackground = False
     TabOrder = 2
+    ExplicitTop = 754
+    ExplicitWidth = 1238
     object FStatus: TLabel
       Left = 24
       Top = 0
@@ -129,6 +133,8 @@ object MainForm: TMainForm
     Padding.Bottom = 20
     ParentBackground = False
     TabOrder = 1
+    ExplicitWidth = 1238
+    ExplicitHeight = 666
     object OptionsPanel: TPanel
       Left = 920
       Top = 20
@@ -139,6 +145,8 @@ object MainForm: TMainForm
       Color = clWhite
       ParentBackground = False
       TabOrder = 1
+      ExplicitLeft = 918
+      ExplicitHeight = 626
       DesignSize = (
         300
         634)
@@ -353,6 +361,7 @@ object MainForm: TMainForm
         ParentFont = False
         TabOrder = 7
         OnClick = SignClick
+        ExplicitTop = 520
       end
     end
     object ViewerPanel: TPanel
@@ -366,6 +375,8 @@ object MainForm: TMainForm
       Padding.Right = 20
       ParentBackground = False
       TabOrder = 0
+      ExplicitWidth = 898
+      ExplicitHeight = 626
       object FPaint: TPaintBox
         Left = 0
         Top = 58
@@ -385,6 +396,7 @@ object MainForm: TMainForm
         Color = clWhite
         ParentBackground = False
         TabOrder = 0
+        ExplicitWidth = 878
         DesignSize = (
           880
           58)
@@ -431,6 +443,7 @@ object MainForm: TMainForm
           Caption = 'Anterior'
           TabOrder = 0
           OnClick = PreviousClick
+          ExplicitLeft = 486
         end
         object NextButton: TButton
           Left = 688
@@ -441,6 +454,7 @@ object MainForm: TMainForm
           Caption = 'Proxima'
           TabOrder = 1
           OnClick = NextClick
+          ExplicitLeft = 686
         end
       end
     end
