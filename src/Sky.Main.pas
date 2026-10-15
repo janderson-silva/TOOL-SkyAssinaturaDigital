@@ -8,6 +8,23 @@ uses Winapi.Windows, System.SysUtils, System.Classes, System.Types,
 
 type
   TMainForm = class(TForm)
+    BrandMark: TPanel;
+    TitleLabel: TLabel;
+    SubtitleLabel: TLabel;
+    WorkspacePanel: TPanel;
+    ViewerPanel: TPanel;
+    DocumentToolbar: TPanel;
+    StatusPanel: TPanel;
+    DocumentLabel: TLabel;
+    PageLabel: TLabel;
+    SettingsTitle: TLabel;
+    CertificateTitle: TLabel;
+    WidthLabel: TLabel;
+    HeightLabel: TLabel;
+    PlacementTitle: TLabel;
+    PlacementHint: TLabel;
+    SaveHint: TLabel;
+    DividerShape: TShape;
     ToolbarPanel: TPanel;
     OptionsPanel: TPanel;
     OpenButton: TButton;
@@ -21,6 +38,7 @@ type
     FCertLabel: TLabel;
     FWidthEdit: TEdit;
     FHeightEdit: TEdit;
+    procedure FormResize(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure OpenClick(Sender: TObject);
@@ -53,6 +71,11 @@ implementation
 uses System.IOUtils, System.Math;
 
 {$R *.dfm}
+
+procedure TMainForm.FormResize(Sender: TObject);
+begin
+  if Assigned(FPaint) then FPaint.Invalidate;
+end;
 
 procedure TMainForm.FormCreate(Sender: TObject);
 var G: TGUID;
@@ -98,6 +121,9 @@ begin
     D.Filter := 'Documento PDF|*.pdf'; D.Options := [ofFileMustExist, ofPathMustExist];
     if not D.Execute then Exit;
     FLoaded := False; FPlaced := False; FBitmap.SetSize(0, 0); FPaint.Invalidate;
+    DocumentLabel.Caption := 'Visualizacao do documento';
+    DocumentLabel.Hint := '';
+    PageLabel.Caption := 'Sem documento';
     FInput := D.FileName;
     TFile.Copy(FInput, TPath.Combine(FFolder, 'source.pdf'), True);
     FDocument.Load(TPath.Combine(FFolder, 'source.pdf'));
@@ -110,7 +136,10 @@ end;
 procedure TMainForm.CertClick(Sender: TObject);
 begin
   FCertificate.Select(Handle);
-  FCertLabel.Caption := 'Certificado: ' + FCertificate.Name;
+  if FCertificate.Context <> nil then
+    FCertLabel.Caption := FCertificate.Name
+  else FCertLabel.Caption := 'Nenhum certificado selecionado';
+  FCertLabel.Hint := FCertLabel.Caption;
 end;
 
 procedure TMainForm.Render;
@@ -150,6 +179,9 @@ begin
     PNG := TPngImage.Create;
     try PNG.LoadFromFile(Output); FBitmap.Assign(PNG); finally PNG.Free; end;
     FPlaced := False; FPaint.Invalidate;
+    DocumentLabel.Caption := TPath.GetFileName(FInput);
+    DocumentLabel.Hint := FInput;
+    PageLabel.Caption := Format('%d de %d', [FPage+1, FDocument.PageCount]);
     FStatus.Caption := Format('Pagina %d de %d. Clique para posicionar o canto superior esquerdo.',
       [FPage+1, FDocument.PageCount]);
   finally Screen.Cursor := crDefault; end;
@@ -171,25 +203,43 @@ procedure TMainForm.SizeChanged(Sender: TObject);
 begin FPlaced := False; if Assigned(FPaint) then FPaint.Invalidate; end;
 
 procedure TMainForm.PaintPage(Sender: TObject);
-var Scale: Double; W, H, X, Y: Integer; Pg: TPdfPage; R: TRect;
+var Scale: Double; W, H, X, Y, Gap: Integer; Pg: TPdfPage; R: TRect;
 begin
-  FPaint.Canvas.Brush.Color := clBtnShadow;
+  FPaint.Canvas.Brush.Style := bsSolid;
+  FPaint.Canvas.Brush.Color := $00E8E2DD;
   FPaint.Canvas.FillRect(FPaint.ClientRect);
   if not Assigned(FBitmap) then Exit;
-  if (FBitmap.Width = 0) or (FBitmap.Height = 0) then Exit;
-  Scale := Min((FPaint.Width-24)/FBitmap.Width, (FPaint.Height-24)/FBitmap.Height);
+  if (FBitmap.Width = 0) or (FBitmap.Height = 0) then
+  begin
+    FPaint.Canvas.Brush.Style := bsClear;
+    FPaint.Canvas.Font.Assign(Font);
+    FPaint.Canvas.Font.Color := $007C6F63;
+    FPaint.Canvas.Font.Style := [fsBold];
+    R := FPaint.ClientRect;
+    DrawText(FPaint.Canvas.Handle, 'Abra um PDF para comecar', -1, R,
+      DT_CENTER or DT_VCENTER or DT_SINGLELINE or DT_NOPREFIX);
+    FPaint.Canvas.Brush.Style := bsSolid;
+    Exit;
+  end;
+  Gap := MulDiv(24, PixelsPerInch, 96);
+  Scale := Min((FPaint.Width-2*Gap)/FBitmap.Width, (FPaint.Height-2*Gap)/FBitmap.Height);
   if Scale <= 0 then Exit;
   W := Round(FBitmap.Width*Scale); H := Round(FBitmap.Height*Scale);
   X := (FPaint.Width-W) div 2; Y := (FPaint.Height-H) div 2;
   FPageRect := Rect(X, Y, X+W, Y+H);
+  FPaint.Canvas.Brush.Color := $00CEC5BD;
+  R := FPageRect;
+  OffsetRect(R, MulDiv(3, PixelsPerInch, 96), MulDiv(4, PixelsPerInch, 96));
+  FPaint.Canvas.FillRect(R);
   FPaint.Canvas.StretchDraw(FPageRect, FBitmap);
   if not FPlaced then Exit;
   Pg := FDocument.Page(FPage);
   R := Rect(X+Round(FX/Pg.Width*W), Y+Round((Pg.Height-FY-SignatureHeight)/Pg.Height*H),
     X+Round((FX+SignatureWidth)/Pg.Width*W), Y+Round((Pg.Height-FY)/Pg.Height*H));
-  FPaint.Canvas.Brush.Style := bsClear; FPaint.Canvas.Pen.Color := clBlue;
+  FPaint.Canvas.Brush.Style := bsClear; FPaint.Canvas.Pen.Color := $00D66920;
   FPaint.Canvas.Pen.Width := 2; FPaint.Canvas.Rectangle(R);
-  FPaint.Canvas.Font.Color := clBlue;
+  FPaint.Canvas.Font.Assign(Font);
+  FPaint.Canvas.Font.Color := $00D66920;
   FPaint.Canvas.TextOut(R.Left+5, R.Top+5, 'Assinatura digital');
   FPaint.Canvas.Pen.Width := 1; FPaint.Canvas.Brush.Style := bsSolid;
 end;
